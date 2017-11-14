@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Reminders</string>
+    <string name="menuitem_new">New</string>
+    <string name="menuitem_exit">Exit</string>
+</resources>
