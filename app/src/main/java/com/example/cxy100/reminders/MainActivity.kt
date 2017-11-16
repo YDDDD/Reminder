@@ -2,9 +2,14 @@ package com.example.cxy100.reminders
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ListView;
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +42,27 @@ class MainActivity : AppCompatActivity() {
 
         mCursorAdapter = RemindersSimpleCursorAdapter(this, R.layout.listview_cell, cursor!!, from, to, 0)
 
-        mListView!!.adapter = mCursorAdapter;
+        mListView!!.adapter = mCursorAdapter
+        mListView!!.onItemClickListener = object : AdapterView.OnItemClickListener{
+            override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //Toast.makeText(this@MainActivity, "Clicked $position", Toast.LENGTH_SHORT)
+                var builder = AlertDialog.Builder(this@MainActivity)
+                var modeListView = ListView(this@MainActivity)
+                var modes = arrayOf("Edit Reminder", "Delete Reminder")
+                val modeAdapter = ArrayAdapter(this@MainActivity,
+                        android.R.layout.simple_list_item_1, android.R.id.text1, modes)
+                modeListView.adapter = modeAdapter
+                builder.setView(modeListView)
+                val dialog = builder.create()
+                dialog.show()
+                modeListView.setOnItemClickListener { parent, view, position, id ->
+                    dialog.dismiss()
+                }
+            }
+
+        }
+
+
     }
 
 
@@ -74,10 +99,9 @@ class MainActivity : AppCompatActivity() {
         mDbAdapter?.createReminder("Buy new paddles for kayaks", false)
         mDbAdapter?.createReminder("Call accountant about tax returns", false)
         mDbAdapter?.createReminder("Buy 300,000 shares of Google", false)
-        mDbAdapter?.createReminder("Call the Dalai Lama back", true)
     }
 
-    
+
 }
 
 
